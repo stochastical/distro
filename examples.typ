@@ -1,6 +1,8 @@
 #import "@preview/simple-plot:0.3.0": line-plot, plot, scatter
 #import "./lib.typ": *
 
+
+
 == Discrete distributions
 
 === Bernoulli distribution
@@ -24,11 +26,11 @@
 
 === Binomial distribution
 
-#let (n, p) = (20, 0.5)
+#let (n, p) = (20, 0.3)
 #let Bi = binomial.pmf(n, p)
 
 #let points = range(0, n + 1).map(i => scatter(((i, Bi(i)),)))
-#let ymax = 1.2* points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+#let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
 
 #plot(
   width: 10,
@@ -76,13 +78,37 @@
   (fn: geometric.cdf(0.8), label: $p=0.8$, label-pos: 0.5, label-side: "above-right"),
 )
 
+=== Poisson distribution
+
+#let lam = 4
+#let Pois = poisson.pmf(lam)
+
+#let n = 20
+#let points = range(0, n).map(i => scatter(((i, Pois(i)),)))
+#let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+
+#plot(
+  width: 8,
+  height: 6,
+  xmin: 0,
+  xmax: n,
+  ymin: 0,
+  ymax: ymax,
+  xlabel: $k$,
+  ylabel: $f(k) = (lambda^k e^(-lambda)) / k!$,
+  axis-y-extend: 0,
+  ..points,
+)
+
+#pagebreak()
+
 == Continuous distributions
 
 === Normal distribution
 
 #plot(
-  width: 8,
-  height: 6,
+  width: 12,
+  height: 8,
   xmin: -5,
   xmax: 5,
   ymin: 0,
@@ -92,8 +118,8 @@
 )
 
 #plot(
-  width: 8,
-  height: 6,
+  width: 12,
+  height: 8,
   xmin: -4,
   xmax: 4,
   ymin: -1,
