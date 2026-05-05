@@ -199,7 +199,7 @@
       ymin: 0,
       ymax: 1.1,
       axis-y-extend: 0,
-      (fn: uniform.pdf(0, 1)),
+      (fn: continuous_uniform.pdf(0, 1)),
     )
   ],
   [
@@ -211,7 +211,7 @@
       ymin: 0,
       ymax: 1.1,
       axis-y-extend: 0,
-      (fn: uniform.cdf(0, 1)),
+      (fn: continuous_uniform.cdf(0, 1)),
     )
   ],
 
@@ -255,7 +255,7 @@
     )
   ],
   [
-  
+
   ],
 )
 
