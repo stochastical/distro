@@ -15,5 +15,6 @@ Defines common probability distributions and their associated functions (pdf, cd
 
 - Continuous uniform distribution
 - Exponential distribution
+- Gamma distribution
 - Normal distribution
 

@@ -240,5 +240,22 @@
       (fn: exponential.cdf(1)),
     )
   ],
+
+  [Gamma],
+  [
+    #plot(
+      width: 5,
+      height: 5,
+      xmin: 0,
+      xmax: 10,
+      ymin: 0,
+      ymax: 0.2,
+      axis-y-extend: 0,
+      (fn: gamma.pdf(2, 0.5)),
+    )
+  ],
+  [
+  
+  ],
 )
 
