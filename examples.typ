@@ -255,7 +255,16 @@
     )
   ],
   [
-
+    #plot(
+      width: 5,
+      height: 5,
+      xmin: 0,
+      xmax: 10,
+      ymin: 0,
+      ymax: 1.1,
+      axis-y-extend: 0,
+      (fn: gamma.cdf(2, 0.5)),
+    )
   ],
 )
 
