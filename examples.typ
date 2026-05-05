@@ -54,7 +54,27 @@
       ..points,
     )],
 
-  [],
+  [
+    #let (n, p) = (10, 0.3)
+    #let Bi = binomial.cdf(n, p)
+
+    #let points = range(0, n + 1).map(i => scatter(((i, Bi(i)),)))
+    #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+    #plot(
+      width: 4,
+      height: 4,
+      xmin: 0,
+      xmax: n,
+      ymin: 0,
+      ymax: ymax,
+      xlabel: $k$,
+      // ylabel-pos: ,
+      ylabel: $F(k) = sum_(i=0)^(k) p(i)$,
+      axis-y-extend: 0,
+      ..points,
+    )
+  ],
+
   [Geometric],
   [
     #plot(
@@ -67,9 +87,9 @@
       xlabel: $k$,
       ylabel: $p(k) = (1-p)^(k-1)p$,
       axis-y-extend: 0,
-      // (fn: geometric.pmf(0.2), label: $p=0.2$, label-pos: 0.1, label-side: "below-left"),
-      // (fn: geometric.pmf(0.5), label: $p=0.5$, label-pos: 0.01, label-side: "left"),
-      // (fn: geometric.pmf(0.8), label: $p=0.8$, label-pos: 0.1, label-side: "right"),
+      (fn: geometric.pmf(0.2), label: $p=0.2$, label-pos: 0.1, label-side: "below-left"),
+      (fn: geometric.pmf(0.5), label: $p=0.5$, label-pos: 0.01, label-side: "left"),
+      (fn: geometric.pmf(0.8), label: $p=0.8$, label-pos: 0.1, label-side: "right"),
     )
   ],
 
@@ -85,8 +105,8 @@
       ylabel: $F(k) = 1 - (1-p)^k$,
 
       axis-y-extend: 0,
-      // (fn: geometric.cdf(0.2), label: $p=0.2$, label-pos: 0.5, label-side: "below-right"),
-      // (fn: geometric.cdf(0.5), label: $p=0.5$, label-pos: 0.5, label-side: "below-right"),
+      (fn: geometric.cdf(0.2), label: $p=0.2$, label-pos: 0.5, label-side: "below-right"),
+      (fn: geometric.cdf(0.5), label: $p=0.5$, label-pos: 0.5, label-side: "below-right"),
       (fn: geometric.cdf(0.8), label: $p=0.8$, label-pos: 0.5, label-side: "above-right"),
     )
   ],
@@ -109,6 +129,25 @@
       ymax: ymax,
       xlabel: $k$,
       ylabel: $f(k) = (lambda^k e^(-lambda)) / k!$,
+      axis-y-extend: 0,
+      ..points,
+    )
+  ],
+  [
+    #let (n, lambda) = (10, 3)
+    #let Pois = poisson.cdf(lambda)
+
+    #let points = range(0, n + 1).map(i => scatter(((i, Pois(i)),)))
+    #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+    #plot(
+      width: 4,
+      height: 4,
+      xmin: 0,
+      xmax: n,
+      ymin: 0,
+      ymax: ymax,
+      xlabel: $k$,
+      ylabel: $F(k) = sum_(i=0)^(k) p(i)$,
       axis-y-extend: 0,
       ..points,
     )
