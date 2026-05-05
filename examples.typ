@@ -22,7 +22,7 @@
       ymin: 0,
       ymax: 1.1,
       axis-y-extend: 0,
-      ..points
+      ..points,
     )
   ],
   [
@@ -38,7 +38,7 @@
       axis-y-extend: 0,
       ..points,
     )
-   ],
+  ],
 
   [Bernoulli],
   [
@@ -75,7 +75,7 @@
       axis-x-extend: 0,
       scatter(((0, Be(0)),), label: $1-p=#{ calc.round(1 - p, digits: 2) }$, label-anchor: "south-west"),
       scatter(((1, Be(1)),), label: $p=#{ calc.round(p, digits: 2) }$, label-anchor: "south"),
-     )
+    )
   ],
 
   [Binomial],
@@ -258,6 +258,32 @@
       ymax: 1.1,
       axis-y-extend: 0,
       (fn: continuous_uniform.cdf(0, 1)),
+    )
+  ],
+
+  [Beta],
+  [
+    #plot(
+      width: 5,
+      height: 5,
+      xmin: -0.5,
+      xmax: 1.5,
+      ymin: 0,
+      ymax: 2.5,
+      axis-y-extend: 0,
+      (fn: beta.pdf(2, 3)),
+    )
+  ],
+  [
+    #plot(
+      width: 5,
+      height: 5,
+      xmin: -0.5,
+      xmax: 1.5,
+      ymin: 0,
+      ymax: 1.1,
+      axis-y-extend: 0,
+      (fn: beta.cdf(2, 3)),
     )
   ],
 

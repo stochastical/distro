@@ -35,7 +35,7 @@
 
     if k >= n {
       1.0
-    } else { beta_reg(n - k, k + 1, 1 - p) }
+    } else { beta_reg(n - k, k + 1)(1 - p) }
   }
 }
 

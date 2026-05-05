@@ -1,4 +1,5 @@
 #import "distribution/bernoulli.typ" as bernoulli
+#import "distribution/beta.typ" as beta
 #import "distribution/binomial.typ" as binomial
 #import "distribution/exponential.typ" as exponential
 #import "distribution/gamma.typ" as gamma
