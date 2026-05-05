@@ -6,3 +6,4 @@
 #import "distribution/poisson.typ" as poisson
 #import "distribution/normal.typ" as normal
 #import "distribution/continuous_uniform.typ" as continuous_uniform
+#import "distribution/discrete_uniform.typ" as discrete_uniform
