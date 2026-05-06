@@ -30,16 +30,16 @@ The `Normal` function acts as a constructor, validating the paramaters, and retu
 
 ## Discrete distributions
 
-- Binomial distribution
-- Bernoulli distribution
-- Geometric distribution
-- Poisson distribution
-- Discrete uniform distribution
+- [`Binomial`](/distribution/binomial.typ)
+- [`Bernoulli`](/distribution/bernoulli.typ)
+- [`Geometric`](/distribution/geometric.typ)
+- [`Poisson`](/distribution/poisson.typ)
+- [`DiscreteUniform`](/distribution/discrete_uniform.typ)
 
 ## Continuous distributions
 
-- Beta distribution
-- Continuous uniform distribution
-- Exponential distribution
-- Gamma distribution
-- Normal distribution
+- [`Beta`](/distribution/beta.typ)
+- [`ContinuousUniform`](/distribution/continuous_uniform.typ)
+- [`Exponential`](/distribution/exponential.typ)
+- [`Gamma`](/distribution/gamma.typ)
+- [`Normal`](/distribution/normal.typ)
