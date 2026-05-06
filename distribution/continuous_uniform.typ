@@ -1,4 +1,16 @@
-#let pdf(a, b) = {
+#import calc: pow
+
+#let ContinuousUniform(a, b) = {
+  assert(a < b, message: "Lower bound " + str(a) + " must be less than upper bound " + str(b) + ".")
+  (
+    a: a,
+    b: b,
+    mean: (a + b) / 2,
+    variance: pow(b - a, 2) / 12,
+  )
+}
+
+#let pdf((a: a, b: b)) = {
   x => {
     if x < a or x > b {
       0.0
@@ -8,7 +20,7 @@
   }
 }
 
-#let cdf(a, b) = {
+#let cdf((a: a, b: b)) = {
   x => {
     if x < a {
       0.0
@@ -19,10 +31,3 @@
     }
   }
 }
-
-// Examples
-#pdf(0, 1)(0.5)
-
-#pdf(0, 1)(-1)
-
-#pdf(0, 1)(2)
