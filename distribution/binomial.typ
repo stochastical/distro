@@ -1,6 +1,8 @@
 #import calc: binom, pow
 #import "../function/beta.typ": beta-reg
 
+// Issue: calc.binom is not efficient for large n, and can overflow for moderate n. #link("https://github.com/typst/typst/issues/4993")
+
 #let new(n, p) = {
   assert(n >= 0, message: "Number of trials " + str(n) + " must be non-negative.")
   assert(p >= 0.0 and p <= 1.0, message: "Probability of success " + str(p) + " must be in the range [0, 1].")
@@ -27,6 +29,35 @@
 /// where $I_(x)(a, b)$ is the regularized incomplete beta function
 #let cdf((n: n, p: p)) = {
   k => if k >= n { 1.0 } else { beta-reg(n - k, k + 1)(1 - p) }
+}
+
+```rust
+(0..self.n).fold(0, |acc, _| {
+            let n: f64 = rng.gen();
+            if n < self.p {
+                acc + 1
+            } else {
+                acc
+            }
+        })
+    }
+```
+
+
+///
+///
+/// - _ ():
+/// - u ():
+/// ->
+#let sample((n: n, p: p), u) = {
+  assert(u >= 0.0 and u < 1.0, message: "Uniform random variate " + str(u) + " must be in the range [0, 1).")
+  let k = 0
+  let cumulative = cdf((n: n, p: p))(k)
+  while cumulative <= u {
+    k += 1
+    cumulative = cdf((n: n, p: p))(k)
+  }
+  k
 }
 
 /// $F(k) = sum_(i=0)^(k) p(i)$ for $k in {0, 1, ..., n}$
