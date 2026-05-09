@@ -53,7 +53,7 @@
       xmin: 0,
       xmax: Cat.weights.len(),
       ymin: 0,
-      ymax: Cat.weights.reduce((acc, x) => calc.max(acc, x)) * 1.1,
+      ymax: calc.max(..Cat.weights) * 1.1,
       axis-y-extend: 0,
       ..points,
     )
@@ -130,7 +130,7 @@
   [
     #let Bi = binomial.new(10, 0.3)
     #let points = range(0, Bi.n + 1).map(i => scatter(((i, binomial.pmf(Bi)(i)),)))
-    #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+    #let ymax = 1.2 * calc.max(..points.map(p => p.points.at(0).at(1)))
 
     #plot(
       width: 4,
@@ -149,7 +149,7 @@
   [
     #let Bi = binomial.new(10, 0.3)
     #let points = range(0, Bi.n + 1).map(i => scatter(((i, binomial.cdf(Bi)(i)),)))
-    #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+    #let ymax = 1.2 * calc.max(..points.map(p => p.points.at(0).at(1)))
     #plot(
       width: 4,
       height: 4,
@@ -206,7 +206,7 @@
     #let n = 11
     // #let points = range(0, n).map(i => scatter(((i, Pois(i)),)))
     #let points = range(0, n).map(i => scatter(((i, poisson.pmf(Pois)(i)),)))
-    #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+    #let ymax = 1.2 * calc.max(..points.map(p => p.points.at(0).at(1)))
 
     #plot(
       width: 4,
@@ -225,7 +225,7 @@
     #let Pois = poisson.new(rate: 3)
     #let n = 10
     #let points = range(0, n + 1).map(i => scatter(((i, poisson.cdf(Pois)(i)),)))
-    #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
+    #let ymax = 1.2 * calc.max(..points.map(p => p.points.at(0).at(1)))
     #plot(
       width: 4,
       height: 4,
