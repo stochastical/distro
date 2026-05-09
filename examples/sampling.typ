@@ -1,5 +1,6 @@
 #import "@preview/suiji:0.5.1": *
-#import "../lib.typ": categorical
+#import "@preview/simple-plot:0.3.0": *
+#import "../lib.typ": binomial, categorical
 
 == Sampling Random Variates
 
@@ -9,7 +10,6 @@
 #let counts = (0,) * Cat.weights.len()
 #let (rng, u) = (gen-rng-f(42), none)
 
-// Sampling Loop
 #for _ in range(n_samples) {
   (rng, u) = uniform-f(rng)
   let result = categorical.sample(Cat, u)
@@ -29,4 +29,33 @@
       [#(calc.round(count / n_samples * 100, digits: 1))%],
     )
   },
+)
+
+=== Binomial Distribution
+#let n = 10
+#let p = 0.3
+#let Bi = binomial.new(n, p)
+
+#let n_samples = 100
+#let counts = (0,) * (n + 1)
+#let (rng, u) = (gen-rng-f(42), none)
+#for _ in range(n_samples) {
+  (rng, u) = uniform-f(rng)
+  let result = binomial.sample(Bi, u)
+  counts.at(result) += 1
+}
+
+#let ks = range(0, n + 1)
+#let empirical_pmf = counts.map(i => i / n_samples)
+#let true_pmf = ks.map(binomial.pmf(Bi))
+#plot(
+  ..(
+    scatter(ks.zip(true_pmf)),
+    scatter(ks.zip(empirical_pmf)),
+  ),
+  xmin: 0,
+  xmax: n,
+  ymin: 0,
+  ymax: 1,
+  axis-y-extend: 0,
 )

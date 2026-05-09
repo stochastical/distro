@@ -13,7 +13,8 @@
   [Uniform],
   [
     #let Unif = discrete-uniform.new(0.0, 4.0)
-    #let points = range(0, 5).map(i => scatter(((i, discrete-uniform.pmf(Unif)(i)),)))
+    #let pmf = discrete-uniform.pmf(Unif)
+    #let points = range(0, 5).map(i => scatter(((i, pmf(i)),)))
     #plot(
       width: 5,
       height: 5,
@@ -29,7 +30,8 @@
   ],
   [
     #let Unif = discrete-uniform.new(0.0, 4.0)
-    #let points = range(0, 5).map(i => scatter(((i, discrete-uniform.cdf(Unif)(i)),)))
+    #let cdf = discrete-uniform.cdf(Unif)
+    #let points = range(0, 5).map(i => scatter(((i, cdf(i)),)))
     #plot(
       width: 5,
       height: 5,
@@ -280,7 +282,7 @@
 
   [Uniform],
   [
-    #let Unif = continuous-uniform.new(0.0, 1.0)
+    #let Unif = continuous-uniform.new(0, 1)
     #plot(
       width: 5,
       height: 5,
@@ -293,7 +295,7 @@
     )
   ],
   [
-    #let Unif = continuous-uniform.new(0.0, 1.0)
+    #let Unif = continuous-uniform.new(0, 1)
     #plot(
       width: 5,
       height: 5,
