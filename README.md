@@ -4,7 +4,8 @@ Defines common probability distributions and their associated functions (pdf, cd
 
 > [!WARNING]
 > This library is still in early development, please use with caution. Typst is not designed for robust statistical use, and built-in functions like `calc.binom` overflow quickly.
-> The numerical computations are heavily inspired by the [`statrs`](https://github.com/statrs-dev/statrs) Rust crate.
+> 
+> Some of the numerical computations are derived from the Rust [`statrs`](https://github.com/statrs-dev/statrs) crate.
 
 # Installation
 
@@ -24,6 +25,8 @@ In the meantime, you can just grab the code directly from here.
 }
 ```
 
+Please also see the `examples` folder for more applications.
+
 Since Typst doesn't (currently) support custom objects and methods, you must pass the instance of the distribution variable into the associated `pdf` or `cdf` function.
 The `new` function acts as a constructor, validating the paramaters, and returning a `dictionary` that stores the mean and variance.
 
@@ -31,14 +34,15 @@ The `new` function acts as a constructor, validating the paramaters, and returni
 
 - [`Binomial`](/distribution/binomial.typ)
 - [`Bernoulli`](/distribution/bernoulli.typ)
+- [`Categorical`](/distribution/categorical.typ)
 - [`Geometric`](/distribution/geometric.typ)
 - [`Poisson`](/distribution/poisson.typ)
-- [`DiscreteUniform`](/distribution/discrete-uniform.typ)
+- [`Discrete Uniform`](/distribution/discrete-uniform.typ)
 
 ## Continuous distributions
 
 - [`Beta`](/distribution/beta.typ)
-- [`ContinuousUniform`](/distribution/continuous-uniform.typ)
+- [`Continuous Uniform`](/distribution/continuous-uniform.typ)
 - [`Exponential`](/distribution/exponential.typ)
 - [`Gamma`](/distribution/gamma.typ)
 - [`Normal`](/distribution/normal.typ)
