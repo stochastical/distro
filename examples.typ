@@ -1,9 +1,4 @@
 #import "@preview/simple-plot:0.3.0": line-plot, plot, scatter
-#import "./lib.typ": (
-  continuous_uniform.ContinuousUniform, discrete_uniform.DiscreteUniform, exponential.Exponential, gamma.Gamma,
-  normal.Normal, poisson.Poisson, geometric.Geometric, binomial.Binomial, exponential.Exponential, gamma.Gamma,
-  discrete_uniform.DiscreteUniform, continuous_uniform.ContinuousUniform, beta.Beta, bernoulli.Bernoulli,
-)
 #import "./lib.typ": *
 
 = Distributions
@@ -17,12 +12,28 @@
   table.header([*Distribution*], [*PMF*], [*CDF*]),
   [Uniform],
   [
-    #let Unif = discrete_uniform.DiscreteUniform(0.0, 4.0)
-    #let points = range(0, 5).map(i => scatter(((i, discrete_uniform.pmf(Unif)(i)),)))
+    #let Unif = discrete-uniform.new(0.0, 4.0)
+    #let points = range(0, 5).map(i => scatter(((i, discrete-uniform.pmf(Unif)(i)),)))
     #plot(
       width: 5,
       height: 5,
-      xmin: -1,
+      xmin: 0,
+      xmax: 5,
+      ymin: 0,
+      ymax: 1.1,
+      // ytick-labels: ($1/n$, $1$),
+      // ytick: (.2, 1),
+      axis-y-extend: 0,
+      ..points,
+    )
+  ],
+  [
+    #let Unif = discrete-uniform.new(0.0, 4.0)
+    #let points = range(0, 5).map(i => scatter(((i, discrete-uniform.cdf(Unif)(i)),)))
+    #plot(
+      width: 5,
+      height: 5,
+      xmin: 0,
       xmax: 5,
       ymin: 0,
       ymax: 1.1,
@@ -30,14 +41,32 @@
       ..points,
     )
   ],
+
+  [Categorical],
   [
-    #let Unif = discrete_uniform.DiscreteUniform(0.0, 4.0)
-    #let points = range(0, 5).map(i => scatter(((i, discrete_uniform.cdf(Unif)(i)),)))
+    #let Cat = categorical.new((0.1, 0.3, 0.2, 0.4))
+    #let pmf = categorical.pmf(Cat)
+    #let points = range(0, Cat.weights.len()).map(i => scatter(((i, pmf(i)),)))
     #plot(
       width: 5,
       height: 5,
-      xmin: -1,
-      xmax: 5,
+      xmin: 0,
+      xmax: Cat.weights.len(),
+      ymin: 0,
+      ymax: Cat.weights.reduce((acc, x) => calc.max(acc, x)) * 1.1,
+      axis-y-extend: 0,
+      ..points,
+    )
+  ],
+  [
+    #let Cat = categorical.new((0.1, 0.3, 0.2, 0.4))
+    #let cdf = categorical.cdf(Cat)
+    #let points = range(0, Cat.weights.len()).map(i => scatter(((i, cdf(i)),)))
+    #plot(
+      width: 5,
+      height: 5,
+      xmin: 0,
+      xmax: Cat.weights.len(),
       ymin: 0,
       ymax: 1.1,
       axis-y-extend: 0,
@@ -47,7 +76,7 @@
 
   [Bernoulli],
   [
-    #let Be = Bernoulli(0.8)
+    #let Be = bernoulli.new(0.8)
     #plot(
       width: 4,
       height: 4,
@@ -56,7 +85,7 @@
       ymin: 0,
       ymax: 1,
       xlabel: $k$,
-      ylabel: $p(k)= cases(1-Be.p &"if" k = 0, Be.p &"if" k = 1)$,
+      ylabel: $p(k)= cases(1-p &"if" k = 0, p &"if" k = 1)$,
       axis-y-extend: 0,
       axis-x-extend: 0,
       scatter(
@@ -72,12 +101,12 @@
     )
   ],
   [
-    #let Be = Bernoulli(0.8)
+    #let Be = bernoulli.new(0.8)
     #plot(
       width: 4,
       height: 4,
-      xmin: -0.5,
-      xmax: 1.5,
+      xmin: 0,
+      xmax: 1.1,
       ymin: 0,
       ymax: 1.1,
       xlabel: $k$,
@@ -99,8 +128,7 @@
 
   [Binomial],
   [
-    #let Bi = Binomial(10, 0.3)
-
+    #let Bi = binomial.new(10, 0.3)
     #let points = range(0, Bi.n + 1).map(i => scatter(((i, binomial.pmf(Bi)(i)),)))
     #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
 
@@ -119,8 +147,7 @@
     )],
 
   [
-    #let Bi = Binomial(10, 0.3)
-
+    #let Bi = binomial.new(10, 0.3)
     #let points = range(0, Bi.n + 1).map(i => scatter(((i, binomial.cdf(Bi)(i)),)))
     #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
     #plot(
@@ -140,7 +167,7 @@
 
   [Geometric],
   [
-    #let Ge = geometric.Geometric(0.2)
+    #let Ge = geometric.new(0.2)
     #plot(
       width: 4,
       height: 4,
@@ -150,18 +177,14 @@
       ymax: 0.3,
       xlabel: $k$,
       ylabel: $p(k) = (1-p)^(k-1)p$,
+      ylabel-pos: (4.3, .25),
       axis-y-extend: 0,
-
-      //  ..range(0, 9).map(i => scatter(((i, (Ge.pmf)(i)),))),
       ..range(0, 9).map(i => scatter(((i, geometric.pmf(Ge)(i)),))),
-      // (fn: geometric.pmf(0.2), label: $p=0.2$, label-pos: 0.1, label-side: "below-left"),
-      // (fn: geometric.pmf(0.5), label: $p=0.5$, label-pos: 0.01, label-side: "left"),
-      // (fn: geometric.pmf(0.8), label: $p=0.8$, label-pos: 0.1, label-side: "right"),
     )
   ],
 
   [
-    #let Ge = geometric.Geometric(0.2)
+    #let Ge = geometric.new(0.2)
     #plot(
       width: 4,
       height: 4,
@@ -171,19 +194,15 @@
       ymax: 1,
       xlabel: $k$,
       ylabel: $F(k) = 1 - (1-p)^k$,
-
+      ylabel-pos: (4.3, .8),
       axis-y-extend: 0,
       ..range(0, 9).map(i => scatter(((i, geometric.cdf(Ge)(i)),))),
-      // (fn: geometric.cdf(0.2), label: $p=0.2$, label-pos: 0.5, label-side: "below-right"),
-      // (fn: geometric.cdf(0.5), label: $p=0.5$, label-pos: 0.5, label-side: "below-right"),
-      // (fn: geometric.cdf(0.8), label: $p=0.8$, label-pos: 0.5, label-side: "above-right"),
     )
   ],
 
   [Poisson],
   [
-    #let Pois = Poisson(rate: 3)
-
+    #let Pois = poisson.new(rate: 3)
     #let n = 11
     // #let points = range(0, n).map(i => scatter(((i, Pois(i)),)))
     #let points = range(0, n).map(i => scatter(((i, poisson.pmf(Pois)(i)),)))
@@ -197,13 +216,13 @@
       ymin: 0,
       ymax: ymax,
       xlabel: $k$,
-      ylabel: $f(k) = (lambda^k e^(-lambda)) / k!$,
+      ylabel: $p(k) = (lambda^k e^(-lambda)) / k!$,
       axis-y-extend: 0,
       ..points,
     )
   ],
   [
-    #let Pois = Poisson(rate: 3)
+    #let Pois = poisson.new(rate: 3)
     #let n = 10
     #let points = range(0, n + 1).map(i => scatter(((i, poisson.cdf(Pois)(i)),)))
     #let ymax = 1.2 * points.map(p => p.points.at(0).at(1)).reduce((acc, x) => calc.max(acc, x))
@@ -215,7 +234,7 @@
       ymin: 0,
       ymax: ymax,
       xlabel: $k$,
-      ylabel: $F(k) = sum_(i=0)^(k) p(i)$,
+      ylabel: $F(k) = sum_(i=0)^(k) (lambda^i e^(-lambda)) / i!$,
       axis-y-extend: 0,
       ..points,
     )
@@ -233,7 +252,7 @@
   table.header([*Distribution*], [*PMF*], [*CDF*]),
   [Normal],
   [
-    #let Z = Normal(mean: 0, std: 3)
+    #let Z = normal.new(mean: 0, std: 3)
     #plot(
       width: 5,
       height: 5,
@@ -246,7 +265,7 @@
     )
   ],
   [
-    #let Z = Normal(mean: 0, std: 1)
+    #let Z = normal.new(mean: 0, std: 1)
     #plot(
       width: 5,
       height: 5,
@@ -261,7 +280,7 @@
 
   [Uniform],
   [
-    #let Unif = ContinuousUniform(0.0, 1.0)
+    #let Unif = continuous-uniform.new(0.0, 1.0)
     #plot(
       width: 5,
       height: 5,
@@ -270,11 +289,11 @@
       ymin: 0,
       ymax: 1.1,
       axis-y-extend: 0,
-      (fn: continuous_uniform.pdf(Unif)),
+      (fn: continuous-uniform.pdf(Unif)),
     )
   ],
   [
-    #let Unif = ContinuousUniform(0.0, 1.0)
+    #let Unif = continuous-uniform.new(0.0, 1.0)
     #plot(
       width: 5,
       height: 5,
@@ -283,13 +302,13 @@
       ymin: 0,
       ymax: 1.1,
       axis-y-extend: 0,
-      (fn: continuous_uniform.cdf(Unif)),
+      (fn: continuous-uniform.cdf(Unif)),
     )
   ],
 
   [Beta],
   [
-    #let X = Beta(alpha: 2, beta: 3)
+    #let X = beta.new(alpha: 2, beta: 3)
     #plot(
       width: 5,
       height: 5,
@@ -302,7 +321,7 @@
     )
   ],
   [
-    #let X = Beta(alpha: 2, beta: 3)
+    #let X = beta.new(alpha: 2, beta: 3)
     #plot(
       width: 5,
       height: 5,
@@ -317,7 +336,7 @@
 
   [Exponential],
   [
-    #let Exp = Exponential(1)
+    #let Exp = exponential.new(1)
     #plot(
       width: 5,
       height: 5,
@@ -330,7 +349,7 @@
     )
   ],
   [
-    #let Exp = Exponential(1)
+    #let Exp = exponential.new(1)
     #plot(
       width: 5,
       height: 5,
@@ -345,7 +364,7 @@
 
   [Gamma],
   [
-    #let X = Gamma(shape: 2, rate: 0.5)
+    #let X = gamma.new(shape: 2, rate: 0.5)
     #plot(
       width: 5,
       height: 5,
@@ -358,7 +377,7 @@
     )
   ],
   [
-    #let X = Gamma(shape: 2, rate: 0.5)
+    #let X = gamma.new(shape: 2, rate: 0.5)
     #plot(
       width: 5,
       height: 5,
@@ -370,4 +389,37 @@
       (fn: gamma.cdf(X)),
     )
   ],
+)
+
+#pagebreak()
+= Normal distribution $Z$-table
+
+#let Z = normal.new(mean: 0, std: 1)
+#let linspace = (start, stop, num) => {
+  // mimics numpy linspace
+  let step = (stop - start) / (num - 1)
+  range(0, num).map(v => start + v * step)
+}
+
+#let x = linspace(-3, 3, 13)
+#let y = x.map(normal.cdf(Z))
+// #x.zip(y)
+#let bases = linspace(-3, 3, 61)
+#let cents = range(0, 10).map(i => i * 0.01)
+
+#table(
+  columns: (auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto),
+  align: horizon,
+  table.header(
+    [$z$ \\ $cal(P)(Z <= z)$],
+    ..linspace(0, 0.09, 10).map(c => [#(calc.round(c, digits: 2))]),
+  ),
+  ..(
+    bases
+      .map(b => (
+        [#(calc.round(b, digits: 1))],
+        ..(cents.map(c => [#calc.round(normal.cdf(Z)(b + c), digits: 5)])),
+      ))
+      .flatten()
+  ),
 )
