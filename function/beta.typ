@@ -1,29 +1,28 @@
 #import calc: abs, exp, ln
-#import "gamma.typ": gamma, lm-gamma
+#import "gamma.typ": gamma, ln-gamma
 
 /// Computes the regularized lower incomplete beta function
-/// `I_x(a,b) = 1/Beta(a,b) * int(t^(a-1)*(1-t)^(b-1), t=0..x)`
-/// `a > 0`, `b > 0`, `1 >= x >= 0` where `a` is the first beta parameter,
-/// `b` is the second beta parameter, and `x` is the upper limit of the
-/// integral.
+/// $
+/// I_x (a,b) = 1/Beta(a,b) integral_0^x t^(a-1) (1-t)^(b-1) dif t
+/// $
+/// `a > 0`, `b > 0`, `1 >= x >= 0` where `a` is the first beta parameter, `b` is the second beta parameter, and `x` is the upper limit of the integral.
 ///
-/// # Errors
-///
-/// if `a <= 0.0`, `b <= 0.0`, `x < 0.0`, or `x > 1.0`
-
-#let MIN_POSITIVE = 2.2250738585072014e-308
-#let F64_PREC = 0.00000000000000011102230246251565
-
+/// - a (float, int): The first beta parameter $a > 0$.
+/// - b (float, int): The second beta parameter $b > 0$.
+/// -> function
 #let beta-reg(a, b) = {
   assert(a > 0.0, message: "Beta function parameter a must be greater than 0")
   assert(b > 0.0, message: "Beta function parameter b must be greater than 0")
   x => {
     assert(0.0 <= x and x <= 1.0, message: "Beta function parameter x must be in the range [0, 1]")
 
+    let MIN_POSITIVE = 2.2250738585072014e-308
+    let F64_PREC = 0.00000000000000011102230246251565
+
     let bt = if x == 0.0 or x == 1.0 {
       0.0
     } else {
-      exp(lm-gamma(a + b) - lm-gamma(a) - lm-gamma(b) + a * ln(x) + b * ln(1.0 - x))
+      exp(ln-gamma(a + b) - ln-gamma(a) - ln-gamma(b) + a * ln(x) + b * ln(1.0 - x))
     }
     bt
 

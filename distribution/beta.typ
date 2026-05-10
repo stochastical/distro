@@ -1,5 +1,5 @@
 #import calc: pow
-#import "../function/gamma.typ": gamma, lm-gamma
+#import "../function/gamma.typ": gamma, ln-gamma
 #import "../function/beta.typ": beta-reg
 
 #let new(alpha: 1.0, beta: 1.0) = {
@@ -36,7 +36,7 @@
     } else if α == 1.0 and β == 1.0 {
       0.0
     } else {
-      let aa = lm-gamma(α + β) - lm-gamma(α) - lm-gamma(β)
+      let aa = ln-gamma(α + β) - ln-gamma(α) - ln-gamma(β)
       let bb = if α == 1.0 and x == 0.0 {
         0.0
       } else if x == 0.0 {

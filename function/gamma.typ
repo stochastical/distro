@@ -1,8 +1,12 @@
 #import calc: abs, e, exp, ln, pi, pow, sin, sqrt
 
-/// Gamma function approximation using Stirling's formula
+/// Gamma function using the asymptotic Stirling approximation.
 ///
-/// - z (float):
+/// #link("https://en.wikipedia.org/wiki/Stirling%27s_approximation#Stirling's_formula_for_the_gamma_function")[Stirling's approximation for the gamma function] states that for _large_ $z > 0$,
+/// $
+/// Gamma(z) approx sqrt((2 pi) / z) (z / e)^z.
+/// $
+/// - z (int, float): The input value $z > 0$ to evaluate the gamma function at.
 /// -> float
 #let gamma-stirling-approx(z) = {
   if z <= 0.0 {
@@ -11,9 +15,6 @@
     sqrt(2 * pi) * pow(z, z - 0.5) * exp(-z)
   }
 }
-
-/// Gamma function approximation using Lanczos' method
-/// Reference: #link("https://docs.rs/statrs/latest/src/statrs/function/gamma.rs.html")[statrs rust implementation]
 
 #let TWO_SQRT_E_OVER_PI = 1.8603827342052657173362492472666631120594218414085755
 
@@ -32,8 +33,17 @@
   -2.71994908488607703910e-9,
 )
 
-// Note that we add an extra guard for x <= 0 (we don't use the reflection formula for x < 0.5, so we need to handle negative x values separately) to avoid the singularity at x = 0 when evaluating the reflection formula for negative x values
-// TOOD: work out what the best way to handle out-of-domain values is (e.g. return NaN, 0, or throw an error)
+/// Gamma function approximation using Lanczos' method.
+///
+/// *Attribution*: #link("https://docs.rs/statrs/latest/src/statrs/function/gamma.rs.html")[`statrs` implementation in Rust].
+///
+/// Computes the `gamma` function with an accuracy
+/// of 16 floating point digits. The implementation
+/// is derived from "An Analysis of the Lanczos Gamma Approximation" (Glendon Ralph Pugh, 2004 p. 116)
+///
+/// Note that we add an extra guard for `x <= 0` (we don't use the reflection formula for `x < 0.5`, so we need to handle negative `x` values separately) to avoid the singularity at `x = 0` when evaluating the reflection formula for negative `x` values.
+/// - x (int, float): The input value $x > 0$ to evaluate the gamma function at.
+/// -> float
 #let gamma(x) = {
   if x <= 0.0 {
     float.nan
@@ -48,7 +58,15 @@
   }
 }
 
-#let lm-gamma(x) = {
+/// Computes the logarithm of the gamma function
+/// with an accuracy of 16 floating point digits.
+/// The implementation is derived from
+/// "An Analysis of the Lanczos Gamma Approximation",
+/// (Glendon Ralph Pugh, 2004 p. 116)
+///
+/// - x (int, float): The input value $x > 0$ to evaluate the logarithm of the gamma function at.
+/// -> float
+#let ln-gamma(x) = {
   if x < 0.5 {
     let s = GAMMA_DK.enumerate().slice(1).fold(GAMMA_DK.at(0), (s, t) => s + t.at(1) / (t.at(0) - x))
 
@@ -61,17 +79,13 @@
 }
 
 /// Computes the lower incomplete regularized gamma function
-/// `P(a,x) = 1 / Gamma(a) * int(exp(-t)t^(a-1), t=0..x) for real a > 0, x > 0`
-/// where `a` is the argument for the gamma function and `x` is the upper
-/// integral limit.
+/// $
+/// P(a,x) = 1 / Gamma(a) integral_0^x e^(-t)t^(a-1) dif t
+/// $ for $a > 0, x > 0$.
 ///
-/// # Remarks
-///
-/// Returns `f64::NAN` if either argument is `f64::NAN`
-///
-/// # Errors
-///
-/// if `a` or `x` are not in `(0, +inf)`
+/// - a (int, float): The shape parameter $a > 0$ of the gamma function.
+/// - x (int, float): The upper limit of integration $x > 0$.
+/// -> float
 #let gamma-lr(a, x) = {
   if a <= 0.0 or x <= 0.0 {
     return float.nan
@@ -81,7 +95,7 @@
   let big = 4503599627370496.0
   let big_inv = 2.22044604925031308085e-16
 
-  let ax = a * ln(x) - x - lm-gamma(a)
+  let ax = a * ln(x) - x - ln-gamma(a)
   if ax < -709.78271289338399 {
     if a < x {
       return 1.0
@@ -150,19 +164,15 @@
 }
 
 /// Computes the upper incomplete regularized gamma function
-/// `Q(a,x) = 1 / Gamma(a) * int(exp(-t)t^(a-1), t=0..x) for a > 0, x > 0`
-/// where `a` is the argument for the gamma function and
-/// `x` is the lower integral limit.
+/// $
+/// Q(a,x) = 1 / Gamma(a) integral_x^oo e^(-t)t^(a-1) dif t
+/// $ for $a > 0, x > 0$.
 ///
-/// # Remarks
-///
-/// Returns `f64::NAN` if either argument is `f64::NAN`
-///
-/// # Errors
-///
-/// if `a` or `x` are not in `(0, +inf)`
+/// - a (int, float): The shape parameter $a > 0$ of the gamma function.
+/// - x (int, float): The lower limit of integration $x > 0$.
+/// -> float
 #let gamma-ur(a, x) = {
-  x = float(x) //TODO hackery
+  x = float(x) //TODO hackery to ensure that we can call x.is-nan() and x.is-infinite()
 
   if a.is-nan() or x.is-nan() or a <= 0.0 or a.is-infinite() or x <= 0.0 or x.is-infinite() {
     return float.nan
@@ -176,7 +186,7 @@
     return 1.0 - gamma-lr(a, x) //TODO check if this is right function
   }
 
-  let ax = a * ln(x) - x - lm-gamma(a)
+  let ax = a * ln(x) - x - ln-gamma(a)
   if ax < -709.78271289338399 {
     return if a < x { 0.0 } else { 1.0 }
   }

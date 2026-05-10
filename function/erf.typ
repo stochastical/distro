@@ -1,8 +1,14 @@
-#import calc: exp, pow, sqrt, abs
+#import calc: abs, exp, pow, sqrt
 
-/// #link("https://personal.math.ubc.ca/%7Ecbm/aands/page_299.htm")[Abramowitz-Stegun approximation (¶7.1.26)] for the error function erf(x)
-/// $Phi(x) approx 1 - (a_1 t + a_2 t^2 + a_3 t^3 + a_4 t^4 + a_5 t^5)e^(-x^2)$ where $t=1 / (1 + p x)$
-/// We apply Horner's method to the polynomial for efficiency and use the odd symmetry of the error function to handle negative $x$ values: $Phi(x) = -Phi(-x)$
+/// #link("https://personal.math.ubc.ca/%7Ecbm/aands/page_299.htm")[Abramowitz-Stegun approximation (¶7.1.26)] for the error function.
+/// - x (int, float): The input value $x in RR$ to evaluate the error function at.
+///
+/// The approximation is 
+/// $
+/// Phi(x) approx 1 - (a_1 t + a_2 t^2 + a_3 t^3 + a_4 t^4 + a_5 t^5)e^(-x^2)
+/// $ 
+/// where $t=1 / (1 + p x)$ and $p, a_1, ..., a_5$ are constants.
+/// We apply Horner's method to the polynomial for computational efficiency and use the odd symmetry of the error function to handle negative $x$ values: $Phi(x) = -Phi(-x)$.
 #let erf(x) = {
   let (p, a1, a2, a3, a4, a5) = (
     0.3275911,
