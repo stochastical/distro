@@ -2,7 +2,7 @@
 
 /// Categorical distribution
 ///
-/// - weights (list of float): The weights for each category, must be non-negative and sum to 1.
+/// - weights (array[float]): The weights for each category, must be non-negative and sum to 1.
 /// -> dictionary
 #let new(weights) = {
   assert(weights.all(w => w >= 0), message: "All weights must be non-negative.")

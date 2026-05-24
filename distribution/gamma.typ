@@ -20,21 +20,20 @@
 
 /// Gamma distribution PDF
 ///
-/// $f(x; alpha, beta) = (x^(alpha-1) e^(-beta x) beta^alpha) / Gamma(alpha)$
-/// - alpha (float): shape parameter
-/// - beta (float): rate parameter
+/// $
+/// f(x; alpha, beta) = (x^(alpha-1) e^(-beta x) beta^alpha) / Gamma(alpha)
+/// $
+/// - (α: α, β: β) (dictionary): A dictionary reprsenting a gamma distribution.
 /// -> function
-// #let pdf(α, β) = {
-//   x => pow(x, α - 1) * exp(-x * β) * pow(β, α) / gamma(α)
-// }
 #let pdf((α: α, β: β)) = {
   x => pow(x, α - 1) * exp(-x * β) * pow(β, α) / gamma(α)
 }
 
 /// Regularised lower incomplete gamma CDF
-/// $F(x; alpha, beta) = P(alpha, beta x)$
-/// - alpha (float): shape parameter
-/// - beta (float): rate parameter (= 1/scale)
+/// $
+/// F(x; alpha, beta) = P(alpha, beta x)
+/// $
+/// - (α: α, β: β) (dictionary): A dictionary reprsenting a gamma distribution.
 /// -> function
 #let cdf((α: α, β: β)) = {
   x => gamma-lr(α, β * x)
