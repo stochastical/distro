@@ -3,7 +3,7 @@
 
 /// The binomial distribution models the number of successes in a fixed number of independent Bernoulli trials, each with the same probability of success.
 ///
-/// - n (int): The number of trials $n$
+/// - n (int): The number of trials $n>=0$
 /// - p (float): The probability of success $p in [0,1]$
 /// -> dictionary
 #let new(n, p) = {
@@ -17,13 +17,17 @@
   )
 }
 
-
-/// The probability mass function (PMF) of the binomial distribution gives the probability of observing exactly $k$ successes in $n$ trials, where each trial has a success probability of $p$.
+/// The PMF of the binomial distribution gives the probability of observing exactly $k$ successes in $n$ trials, where each trial has a success probability of $p$.
 ///
-/// $p(k) = binom(n, k) p^k (1-p)^(n-k)$ for $k in {0, 1, ..., n}$
+/// $
+/// p(k) = binom(n, k) p^k (1-p)^(n-k)
+/// $
+/// for $k in {0, 1, ..., n}$.
 ///
 /// *WARNING*: `calc.binom` will overflow for moderately sized $n$: #link("https://github.com/typst/typst/issues/4993").
-/// - (n: n, p: p) (pattern): A dictionary representing the Binomial distribution
+///
+/// - `(n: n, p: p)` (dictionary): A dictionary representing the Binomial distribution
+/// -> function
 #let pmf((n: n, p: p)) = {
   k => {
     assert(
@@ -35,19 +39,22 @@
 }
 
 /// Binomial CDF
-/// Calculates the cumulative distribution function for the binomial distribution at $k$
-/// $I_(1 - p)(n - k, 1 + k)$
+/// $
+/// I_(1 - p)(n - k, 1 + k)
+/// $
+/// where $I_(x)(a, b)$ is the regularised incomplete beta function.
 ///
-/// where $I_(x)(a, b)$ is the regularized incomplete beta function
+/// - `(n: n, p: p)` (dictionary): A dictionary representing the Binomial distribution
+/// -> function
 #let cdf((n: n, p: p)) = {
   k => if k >= n { 1.0 } else { beta-reg(n - k, k + 1)(1 - p) }
 }
 
+/// Generates a random variate from the binomial distribution using inverse transform sampling.
 ///
-///
-/// - _ ():
-/// - u ():
-/// ->
+/// - `(n: n, p: p)` (dictionary): A dictionary representing the Binomial distribution
+/// - u (float): A uniform random variate in the range [0, 1)
+/// -> int
 #let sample((n: n, p: p), u) = {
   assert(u >= 0.0 and u < 1.0, message: "Uniform random variate " + str(u) + " must be in the range [0, 1).")
   let k = 0
@@ -58,16 +65,4 @@
   }
   k
 }
-
-/// $F(k) = sum_(i=0)^(k) p(i)$ for $k in {0, 1, ..., n}$
-/// TODO: could use floor and handle k > n more efficiently by returning 1.0 immediately
-/// TODO: Also, fold is probably not optimal - I can cache the pmf(n, p)
-// #let cdf(n, p) = {
-//   assert(p >= 0.0 and p <= 1.0, message: "Probability $p$ must be in the range $[0, 1]$")
-//   assert(n >= 0, message: "Number of trials $n$ must be non-negative")
-//   k => {
-//     assert(k >= 0 and k <= n, message: "The number of successes $k$ must be in {0, 1, ..., " + str(n) + "}")
-//     range(0, k + 1).fold(0.0, (acc, i) => acc + pmf(n, p)(i))
-//   }
-// }
 

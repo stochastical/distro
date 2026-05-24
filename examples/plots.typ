@@ -204,7 +204,7 @@
 
   [Poisson],
   [
-    #let Pois = poisson.new(rate: 3)
+    #let Pois = poisson.new(3)
     #let n = 11
     // #let points = range(0, n).map(i => scatter(((i, Pois(i)),)))
     #let points = range(0, n).map(i => scatter(((i, poisson.pmf(Pois)(i)),)))
@@ -224,7 +224,7 @@
     )
   ],
   [
-    #let Pois = poisson.new(rate: 3)
+    #let Pois = poisson.new(3)
     #let n = 10
     #let points = range(0, n + 1).map(i => scatter(((i, poisson.cdf(Pois)(i)),)))
     #let ymax = 1.2 * calc.max(..points.map(p => p.points.at(0).at(1)))
