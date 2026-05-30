@@ -1,4 +1,4 @@
-#import calc: pow
+#import calc: exp, ln, pow
 #import "../function/gamma.typ": gamma, ln-gamma
 #import "../function/beta.typ": beta-reg
 
@@ -30,7 +30,7 @@
   } else if α == 1.0 and β == 1.0 {
     1.0
   } else if α > 80.0 or β > 80.0 {
-    exp(ln_pdf(α, β)(x))
+    exp(ln_pdf((α: α, β: β))(x))
   } else {
     gamma(α + β) / (gamma(α) * gamma(β)) * pow(x, α - 1.0) * pow(1.0 - x, β - 1.0)
   }
