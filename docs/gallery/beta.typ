@@ -1,5 +1,5 @@
 #import "@preview/simple-plot:0.8.0": plot
-#import "../../lib.typ": beta
+#import "@preview/distro:0.1.0": beta
 
 #set page(width: auto, height: auto, margin: 6mm)
 

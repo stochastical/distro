@@ -1,5 +1,5 @@
 #import "@preview/simple-plot:0.8.0": line-plot, plot
-#import "../../lib.typ": continuous-uniform
+#import "@preview/distro:0.1.0": continuous-uniform
 
 #set page(width: auto, height: auto, margin: 6mm)
 

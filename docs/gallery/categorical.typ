@@ -1,5 +1,5 @@
 #import "@preview/simple-plot:0.8.0": plot, scatter
-#import "../../lib.typ": categorical
+#import "@preview/distro:0.1.0": categorical
 
 #set page(width: auto, height: auto, margin: 6mm)
 
