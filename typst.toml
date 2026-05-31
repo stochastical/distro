@@ -10,3 +10,4 @@ description = "Defines random distributions and their properties."
 keywords = ["statistics", "probability", "distributions", "random"]
 categories = ["scripting", "utility"]
 disciplines = ["mathematics", "computer-science"]
+exclude = [".github", ".gitignore", "*.pdf"]
