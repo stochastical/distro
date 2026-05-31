@@ -1,4 +1,4 @@
-#import "@preview/simple-plot:0.3.0": line-plot, plot, scatter
+#import "@preview/simple-plot:0.8.0": line-plot, plot, scatter
 #import "../lib.typ": *
 
 = Distribution plots

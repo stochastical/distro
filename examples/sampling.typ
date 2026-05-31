@@ -1,15 +1,16 @@
 #import "@preview/suiji:0.5.1": *
-#import "@preview/simple-plot:0.3.0": *
+#import "@preview/simple-plot:0.8.0": *
 #import "../lib.typ": binomial, categorical, poisson
 
 == Sampling Random Variates
 
 === Categorical Distribution
-#let n_samples = 1000
 #let Cat = categorical.new((0.1, 0.3, 0.2, 0.4))
+
+// Random variate generation
+#let n_samples = 1000
 #let counts = (0,) * Cat.weights.len()
 #let (rng, u) = (gen-rng-f(42), none)
-
 #for _ in range(n_samples) {
   (rng, u) = uniform-f(rng)
   let result = categorical.sample(Cat, u)
@@ -73,7 +74,7 @@
   let result = poisson.sample(Po, u)
   // To avoid out-of-bounds error in case of large samples
   // we artificially restrict the support of the sampled distribution for plotting purposes.
-  if result < counts.len() { 
+  if result < counts.len() {
     counts.at(result) += 1
   }
 }

@@ -1,20 +1,13 @@
-# `distro`
+# distro
 
-Defines common probability distributions and their associated functions (pdf, cdf, mean, variance, etc.) in pure [`Typst`](https://typst.app).
+A pure [Typst](https://typst.app) library for common probability distributions. Each distribution module provides a constructor, PMF/PDF and CDF. Some modules also include inverse-transform sampling and `mean`/`variance` fields.
 
-> [!WARNING]
-> This library is still in early development, please use with caution. Typst is not designed for robust statistical use, and built-in functions like `calc.binom` overflow quickly.
-> 
-> Some of the numerical computations are derived from the Rust [`statrs`](https://github.com/statrs-dev/statrs) crate.
+This library is still in early development, please use with caution. Typst is not designed for robust statistical use, and built-in functions like `calc.binom` overflow quickly. For any missing pieces, or feature requests, please open an Issue!
 
-# Installation
-
-This package is currently not packaged for [Typst Universe](https://typst.app/universe/), but will be once it stabilises a bit more.
-In the meantime, you can just grab the code directly from here.
-
-# Usage
+## Basic usage
 
 ```typst
+#import "@preview/distro:0.1.0": normal, binomial, bernoulli
 #import calc: sqrt, pi
 #import "@preview:distro": normal
 
@@ -25,24 +18,70 @@ In the meantime, you can just grab the code directly from here.
 }
 ```
 
-Please also see the `examples` folder for more applications.
+## Sampling random variates
 
-Since Typst doesn't (currently) support custom objects and methods, you must pass the instance of the distribution variable into the associated `pdf` or `cdf` function.
-The `new` function acts as a constructor, validating the paramaters, and returning a `dictionary` that stores the mean and variance.
+Provide a uniform random variate from a PRNG such as [suiji](https://typst.app/universe/package/suiji/) and `distro` will sample a random variate from your distribution of choice:
 
-## Discrete distributions
+```typst
+#import "@preview/distro:0.1.0": categorical
+#import "@preview/suiji:0.5.1": gen-rng-f, uniform-f
 
-- [`Binomial`](/distribution/binomial.typ)
-- [`Bernoulli`](/distribution/bernoulli.typ)
-- [`Categorical`](/distribution/categorical.typ)
-- [`Geometric`](/distribution/geometric.typ)
-- [`Poisson`](/distribution/poisson.typ)
-- [`Discrete Uniform`](/distribution/discrete-uniform.typ)
+#let Cat = categorical.new((0.1, 0.3, 0.2, 0.4))
 
-## Continuous distributions
+// Random variate generation
+#let n_samples = 1000
+#let counts = (0,) * Cat.weights.len()
+#let (rng, u) = (gen-rng-f(42), none)
+#for _ in range(n_samples) {
+  (rng, u) = uniform-f(rng)
+  let result = categorical.sample(Cat, u)
+  counts.at(result) += 1
+}
 
-- [`Beta`](/distribution/beta.typ)
-- [`Continuous Uniform`](/distribution/continuous-uniform.typ)
-- [`Exponential`](/distribution/exponential.typ)
-- [`Gamma`](/distribution/gamma.typ)
-- [`Normal`](/distribution/normal.typ)
+// Frequency Table
+#table(
+  columns: (auto, auto, auto),
+  inset: 10pt,
+  align: center,
+  [*Category*], [*Count*], [*%*],
+  ..for (i, count) in counts.enumerate() {
+    (
+      [#i],
+      [#count],
+      [#(calc.round(count / n_samples * 100, digits: 1))%],
+    )
+  },
+)
+```
+
+See [examples/sampling.typ](examples/sampling.typ) for further examples.
+
+## Distributions
+
+Click an image to see the source.
+
+### Discrete
+
+| | |
+|:---:|:---:|
+| [![Bernoulli](docs/gallery/bernoulli.svg)](docs/gallery/bernoulli.typ) | [![Binomial](docs/gallery/binomial.svg)](docs/gallery/binomial.typ) |
+| Bernoulli | Binomial |
+| [![Categorical](docs/gallery/categorical.svg)](docs/gallery/categorical.typ) | [![Geometric](docs/gallery/geometric.svg)](docs/gallery/geometric.typ) |
+| Categorical | Geometric |
+| [![Poisson](docs/gallery/poisson.svg)](docs/gallery/poisson.typ) | [![Discrete Uniform](docs/gallery/discrete-uniform.svg)](docs/gallery/discrete-uniform.typ) |
+| Poisson | Discrete Uniform |
+
+### Continuous
+
+| | |
+|:---:|:---:|
+| [![Beta](docs/gallery/beta.svg)](docs/gallery/beta.typ) | [![Continuous Uniform](docs/gallery/continuous-uniform.svg)](docs/gallery/continuous-uniform.typ) |
+| Beta | Continuous Uniform |
+| [![Exponential](docs/gallery/exponential.svg)](docs/gallery/exponential.typ) | [![Gamma](docs/gallery/gamma.svg)](docs/gallery/gamma.typ) |
+| Exponential | Gamma |
+| [![Normal](docs/gallery/normal.svg)](docs/gallery/normal.typ) | |
+| Normal | |
+
+## Acknowledgements
+
+Numerical algorithms for the gamma and beta functions are adapted from the Rust [statrs](https://github.com/statrs-dev/statrs) crate (MIT licensed).
