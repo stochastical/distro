@@ -64,23 +64,24 @@ Click an image to see the source.
 
 | | |
 |:---:|:---:|
-| [![Bernoulli](docs/gallery/bernoulli.svg)](docs/gallery/bernoulli.typ) | [![Binomial](docs/gallery/binomial.svg)](docs/gallery/binomial.typ) |
 | Bernoulli | Binomial |
-| [![Categorical](docs/gallery/categorical.svg)](docs/gallery/categorical.typ) | [![Geometric](docs/gallery/geometric.svg)](docs/gallery/geometric.typ) |
+| [![Bernoulli](docs/gallery/bernoulli.svg)](docs/gallery/bernoulli.typ) | [![Binomial](docs/gallery/binomial.svg)](docs/gallery/binomial.typ) |
 | Categorical | Geometric |
-| [![Poisson](docs/gallery/poisson.svg)](docs/gallery/poisson.typ) | [![Discrete Uniform](docs/gallery/discrete-uniform.svg)](docs/gallery/discrete-uniform.typ) |
+| [![Categorical](docs/gallery/categorical.svg)](docs/gallery/categorical.typ) | [![Geometric](docs/gallery/geometric.svg)](docs/gallery/geometric.typ) |
 | Poisson | Discrete Uniform |
+| [![Poisson](docs/gallery/poisson.svg)](docs/gallery/poisson.typ) | [![Discrete Uniform](docs/gallery/discrete-uniform.svg)](docs/gallery/discrete-uniform.typ) |
+
 
 ### Continuous
 
 | | |
 |:---:|:---:|
-| [![Beta](docs/gallery/beta.svg)](docs/gallery/beta.typ) | [![Continuous Uniform](docs/gallery/continuous-uniform.svg)](docs/gallery/continuous-uniform.typ) |
 | Beta | Continuous Uniform |
-| [![Exponential](docs/gallery/exponential.svg)](docs/gallery/exponential.typ) | [![Gamma](docs/gallery/gamma.svg)](docs/gallery/gamma.typ) |
+| [![Beta](docs/gallery/beta.svg)](docs/gallery/beta.typ) | [![Continuous Uniform](docs/gallery/continuous-uniform.svg)](docs/gallery/continuous-uniform.typ) |
 | Exponential | Gamma |
-| [![Normal](docs/gallery/normal.svg)](docs/gallery/normal.typ) | |
+| [![Exponential](docs/gallery/exponential.svg)](docs/gallery/exponential.typ) | [![Gamma](docs/gallery/gamma.svg)](docs/gallery/gamma.typ) |
 | Normal | |
+| [![Normal](docs/gallery/normal.svg)](docs/gallery/normal.typ) | |
 
 ## Acknowledgements
 
