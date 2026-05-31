@@ -1,0 +1,170 @@
+name: Package, release, publish
+on:
+  push:
+    tags: [ v* ]
+
+env:
+  REGISTRY_REPO: typst/packages
+  REGISTRY_FORK: stochastical/typst-packages
+  PATH_PREFIX: packages/preview
+
+jobs:
+  # ─── Build ───────────────────────────────────────────────────────────────────
+  # Reads typst.toml, verifies the tag matches the version, copies the package
+  # files (respecting the `exclude` list in typst.toml), and zips the result.
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: nu {0}
+    outputs:
+      pkg-name:       ${{ env.PKG_NAME }}
+      pkg-version:    ${{ env.PKG_VERSION }}
+      pkg-id:         ${{ env.PKG_NAME }}-${{ env.PKG_VERSION }}
+      git-user-name:  ${{ env.GIT_USER_NAME }}
+      git-user-email: ${{ env.GIT_USER_EMAIL }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: hustcer/setup-nu@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate metadata
+        run: |
+          let pkg = (open typst.toml).package
+          let tag = $env.GITHUB_REF_NAME
+
+          if $tag != $"v($pkg.version)" {
+            error make {msg: $"Tag '($tag)' does not match typst.toml version '($pkg.version)'"}
+          }
+
+          let git_name  = (^git log -1 --pretty=format:'%an' | str trim)
+          let git_email = (^git log -1 --pretty=format:'%ae' | str trim)
+
+          $"PKG_NAME=($pkg.name)\nPKG_VERSION=($pkg.version)\nGIT_USER_NAME=($git_name)\nGIT_USER_EMAIL=($git_email)\n"
+          | save --append $env.GITHUB_ENV
+
+      - name: Package files
+        run: |
+          let pkg      = (open typst.toml).package
+          let excludes = ($pkg.exclude? | default [])
+          let out_dir  = $"out/($pkg.name)/($pkg.version)"
+
+          # Expand each pattern: glob for wildcards, literal for bare names.
+          # .git is always excluded regardless of typst.toml.
+          let excluded = (
+            $excludes
+            | each { |pat|
+                let hits = (glob $pat)
+                if ($hits | is-empty) { [$pat] } else { $hits | each { $in | path basename } }
+              }
+            | flatten
+            | append ".git"
+            | append "out"
+            | append "dist"
+            | uniq
+          )
+
+          mkdir $out_dir
+
+          ls --all
+          | where { |f| ($f.name | path basename) not-in $excluded }
+          | each  { |f| cp --recursive $f.name $"($out_dir)/($f.name | path basename)" }
+
+      - name: Create zip archive
+        run: |
+          let pkg_id = $"($env.PKG_NAME)-($env.PKG_VERSION)"
+          mkdir dist
+          cd out
+          ^zip -r $"../dist/($pkg_id).zip" $env.PKG_NAME
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.PKG_NAME }}-${{ env.PKG_VERSION }}
+          path: dist/*
+          retention-days: 3
+
+  # ─── Release ─────────────────────────────────────────────────────────────────
+  # Creates a GitHub release on the source repo and attaches the zip.
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ needs.build.outputs.pkg-id }}
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: ${{ needs.build.outputs.pkg-id }}/*
+
+  # ─── Publish ─────────────────────────────────────────────────────────────────
+  # Checks out typst/packages at its latest main, drops the new version in the
+  # right place, then force-pushes a branch to the fork ready to PR upstream.
+  publish:
+    name: Push to packages fork
+    needs: build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: nu {0}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ env.REGISTRY_REPO }}
+          token: ${{ secrets.REGISTRY_TOKEN }}
+          path: package-registry
+          sparse-checkout: ${{ env.PATH_PREFIX }}/${{ needs.build.outputs.pkg-name }}
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ needs.build.outputs.pkg-id }}
+
+      - uses: hustcer/setup-nu@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push to fork
+        env:
+          PKG_NAME:       ${{ needs.build.outputs.pkg-name }}
+          PKG_VERSION:    ${{ needs.build.outputs.pkg-version }}
+          PKG_ID:         ${{ needs.build.outputs.pkg-id }}
+          GIT_USER_NAME:  ${{ needs.build.outputs.git-user-name }}
+          GIT_USER_EMAIL: ${{ needs.build.outputs.git-user-email }}
+          # gh auth setup-git reads GH_TOKEN to configure the git credential helper.
+          # This keeps the token out of remote URLs and git logs entirely.
+          GH_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+        run: |
+          let pkg_id      = $env.PKG_ID
+          let pkg_name    = $env.PKG_NAME
+          let pkg_version = $env.PKG_VERSION
+
+          # Unzip artifact into a staging directory
+          ^unzip $"($pkg_id)/($pkg_id).zip" -d $pkg_id
+
+          # Place the new version in the registry clone
+          let dest = $"package-registry/($env.PATH_PREFIX)/($pkg_name)"
+          mkdir $dest
+          mv $"($pkg_id)/($pkg_name)/($pkg_version)" $dest
+
+          # Commit in the registry clone
+          cd package-registry
+          ^git config user.name  $env.GIT_USER_NAME
+          ^git config user.email $env.GIT_USER_EMAIL
+          ^git checkout -b $pkg_id
+          ^git add .
+          ^git commit -m $"($pkg_name):($pkg_version)"
+
+          # gh auth setup-git configures a credential helper backed by GH_TOKEN.
+          # The token is never embedded in a URL or visible in `git remote -v`.
+          ^gh auth setup-git
+          ^git remote add fork $"https://github.com/($env.REGISTRY_FORK)"
+          ^git push --force --set-upstream fork $pkg_id
