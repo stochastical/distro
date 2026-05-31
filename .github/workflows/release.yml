@@ -148,7 +148,12 @@ jobs:
           let pkg_version = $env.PKG_VERSION
 
           # Unzip artifact into a staging directory
-          ^unzip $"($pkg_id)/($pkg_id).zip" -d $pkg_id
+          let zip_matches = (glob $"**/($pkg_id).zip")
+          if ($zip_matches | is-empty) {
+            error make {msg: $"Could not find downloaded artifact zip '($pkg_id).zip'"}
+          }
+          let zip_path = ($zip_matches | first)
+          ^unzip $zip_path -d $pkg_id
 
           # Place the new version in the registry clone
           let dest = $"package-registry/($env.PATH_PREFIX)/($pkg_name)"
