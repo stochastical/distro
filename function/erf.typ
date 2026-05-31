@@ -1,6 +1,6 @@
 #import calc: abs, exp, pow, sqrt
 
-/// #link("https://personal.math.ubc.ca/%7Ecbm/aands/page_299.htm")[Abramowitz-Stegun approximation (¶7.1.26)] for the error function.
+/// #link("https://personal.math.ubc.ca/%7Ecbm/aands/page_299.htm")[Abramowitz-Stegun approximation (¶7.1.26)] for the error function. Also see #link("https://en.wikipedia.org/wiki/Error_function#Approximation_with_elementary_functions").
 /// - x (int, float): The input value $x in RR$ to evaluate the error function at.
 ///
 /// The approximation is 
