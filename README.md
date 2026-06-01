@@ -65,11 +65,11 @@ Click an image to see the source.
 | | |
 |:---:|:---:|
 | Bernoulli | Binomial |
-| [![Bernoulli](docs/gallery/bernoulli.svg)](docs/gallery/bernoulli.typ) | [![Binomial](docs/gallery/binomial.svg)](docs/gallery/binomial.typ) |
+| [![Bernoulli PMF (left) and CDF (right)](docs/gallery/bernoulli.svg)](docs/gallery/bernoulli.typ) | [![Binomial PMF (left) and CDF (right)](docs/gallery/binomial.svg)](docs/gallery/binomial.typ) |
 | Categorical | Geometric |
-| [![Categorical](docs/gallery/categorical.svg)](docs/gallery/categorical.typ) | [![Geometric](docs/gallery/geometric.svg)](docs/gallery/geometric.typ) |
+| [![Categorical PMF (left) and CDF (right)](docs/gallery/categorical.svg)](docs/gallery/categorical.typ) | [![Geometric PMF (left) and CDF (right)](docs/gallery/geometric.svg)](docs/gallery/geometric.typ) |
 | Poisson | Discrete Uniform |
-| [![Poisson](docs/gallery/poisson.svg)](docs/gallery/poisson.typ) | [![Discrete Uniform](docs/gallery/discrete-uniform.svg)](docs/gallery/discrete-uniform.typ) |
+| [![Poisson PMF (left) and CDF (right)](docs/gallery/poisson.svg)](docs/gallery/poisson.typ) | [![Discrete Uniform PMF (left) and CDF (right)](docs/gallery/discrete-uniform.svg)](docs/gallery/discrete-uniform.typ) |
 
 
 ### Continuous
@@ -77,11 +77,11 @@ Click an image to see the source.
 | | |
 |:---:|:---:|
 | Beta | Continuous Uniform |
-| [![Beta](docs/gallery/beta.svg)](docs/gallery/beta.typ) | [![Continuous Uniform](docs/gallery/continuous-uniform.svg)](docs/gallery/continuous-uniform.typ) |
+| [![Beta distribution PDF (left) and CDF (right)](docs/gallery/beta.svg)](docs/gallery/beta.typ) | [![Continuous Uniform distribution PDF (left) and CDF (right)](docs/gallery/continuous-uniform.svg)](docs/gallery/continuous-uniform.typ) |
 | Exponential | Gamma |
-| [![Exponential](docs/gallery/exponential.svg)](docs/gallery/exponential.typ) | [![Gamma](docs/gallery/gamma.svg)](docs/gallery/gamma.typ) |
+| [![Exponential distribution PDF (left) and CDF (right)](docs/gallery/exponential.svg)](docs/gallery/exponential.typ) | [![Gamma distribution PDF (left) and CDF (right)](docs/gallery/gamma.svg)](docs/gallery/gamma.typ) |
 | Normal | |
-| [![Normal](docs/gallery/normal.svg)](docs/gallery/normal.typ) | |
+| [![Normal distribution PDF (left) and CDF (right)](docs/gallery/normal.svg)](docs/gallery/normal.typ) | |
 
 ## Acknowledgements
 
