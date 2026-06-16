@@ -1,6 +1,6 @@
 #import "@preview/suiji:0.5.1": *
 #import "@preview/simple-plot:0.8.0": *
-#import "@preview/distro:0.1.0": binomial, categorical, poisson
+#import "@preview/distro:0.2.0": binomial, categorical, poisson
 
 == Sampling Random Variates
 

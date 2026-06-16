@@ -1,5 +1,5 @@
 #import "@preview/simple-plot:0.8.0": plot
-#import "@preview/distro:0.1.0": gamma
+#import "@preview/distro:0.2.0": gamma
 
 #set page(width: auto, height: auto, margin: 6mm)
 

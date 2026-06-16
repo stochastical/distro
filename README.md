@@ -7,7 +7,7 @@ This library is still in early development, please use with caution. Typst is no
 ## Basic usage
 
 ```typst
-#import "@preview/distro:0.1.0": normal, binomial, bernoulli
+#import "@preview/distro:0.2.0": normal, binomial, bernoulli
 #import calc: sqrt, pi
 #import "@preview:distro": normal
 
@@ -23,7 +23,7 @@ This library is still in early development, please use with caution. Typst is no
 Provide a uniform random variate from a PRNG such as [suiji](https://typst.app/universe/package/suiji/) and `distro` will sample a random variate from your distribution of choice:
 
 ```typst
-#import "@preview/distro:0.1.0": categorical
+#import "@preview/distro:0.2.0": categorical
 #import "@preview/suiji:0.5.1": gen-rng-f, uniform-f
 
 #let Cat = categorical.new((0.1, 0.3, 0.2, 0.4))
@@ -82,6 +82,16 @@ Click an image to see the source.
 | [![Exponential distribution PDF (left) and CDF (right)](docs/gallery/exponential.svg)](docs/gallery/exponential.typ) | [![Gamma distribution PDF (left) and CDF (right)](docs/gallery/gamma.svg)](docs/gallery/gamma.typ) |
 | Normal | |
 | [![Normal distribution PDF (left) and CDF (right)](docs/gallery/normal.svg)](docs/gallery/normal.typ) | |
+
+## Changelog
+
+### v0.2.0
+
+Minimum Typst version increased to [`v0.15.0`](https://typst.app/docs/changelog/0.15.0/) to accommodate replacement of package-defined `functions/erf.typ` error-function approximation with Typst-vendored new builtin [`calc.erf`](https://typst.app/docs/reference/foundations/calc#functions-erf) (via [`libm`](https://github.com/typst/typst/blob/3ae52774b48987fc78a72ff483068cacc28e46c2/crates/typst-library/src/foundations/calc.rs#L560)).
+
+### v0.1.0
+
+Initial package creation!
 
 ## Acknowledgements
 

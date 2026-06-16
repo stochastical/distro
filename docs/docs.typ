@@ -58,4 +58,3 @@ A pure Typst library for probability distributions and their associated function
 
 #doc-module("../function/beta.typ", "Beta Function", "beta-func")
 #doc-module("../function/gamma.typ", "Gamma Function", "gamma-func")
-#doc-module("../function/erf.typ", "Error Function", "erf-func")

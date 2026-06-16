@@ -1,4 +1,4 @@
-#import "@preview/distro:0.1.0": normal
+#import "@preview/distro:0.2.0": normal
 
 = Standard Normal distribution $Z$-table
 

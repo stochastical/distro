@@ -1,5 +1,4 @@
-#import calc: abs, exp, pi, pow, sqrt
-#import "../function/erf.typ": erf
+#import calc: abs, exp, pi, pow, sqrt, erf
 
 /// Normal distribution
 /// - mean (int, float): The mean parameter $μ in (-∞, ∞)$
