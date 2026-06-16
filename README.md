@@ -87,7 +87,8 @@ Click an image to see the source.
 
 ### v0.2.0
 
-Minimum Typst version increased to [`v0.15.0`](https://typst.app/docs/changelog/0.15.0/) to accommodate replacement of package-defined `functions/erf.typ` error-function approximation with Typst-vendored new builtin [`calc.erf`](https://typst.app/docs/reference/foundations/calc#functions-erf) (via [`libm`](https://github.com/typst/typst/blob/3ae52774b48987fc78a72ff483068cacc28e46c2/crates/typst-library/src/foundations/calc.rs#L560)).
+- Minimum Typst version increased to [`v0.15.0`](https://typst.app/docs/changelog/0.15.0/) to accommodate replacement of package-defined `functions/erf.typ` error-function approximation with Typst-vendored new builtin [`calc.erf`](https://typst.app/docs/reference/foundations/calc#functions-erf) (via [`libm`](https://github.com/typst/typst/blob/3ae52774b48987fc78a72ff483068cacc28e46c2/crates/typst-library/src/foundations/calc.rs#L560)).
+- Re-compiled the distribution plot gallery SVGs to leverage the [minified SVG export](https://github.com/typst/typst/pull/8371) (reduced gallery size by `200K`).
 
 ### v0.1.0
 
