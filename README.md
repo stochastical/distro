@@ -9,7 +9,6 @@ This library is still in early development, please use with caution. Typst is no
 ```typst
 #import "@preview/distro:0.2.0": normal, binomial, bernoulli
 #import calc: sqrt, pi
-#import "@preview:distro": normal
 
 #{
   let Z = normal.new(mean: 0, std: 1)
