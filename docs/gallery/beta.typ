@@ -1,4 +1,4 @@
-#import "@preview/simple-plot:0.8.0": plot
+#import "@preview/simple-plot:1.1.0": plot
 #import "@preview/distro:0.2.0": beta
 
 #set page(width: auto, height: auto, margin: 6mm)
@@ -13,6 +13,7 @@
     xmin: 0, xmax: 1, ymin: 0, ymax: 2.5,
     xlabel: $x$, ylabel: $f(x)$,
     axis-y-extend: 0,
+    axis-x-extend: 0,
     (fn: beta.pdf(Beta)),
   ),
   plot(
@@ -20,6 +21,7 @@
     xmin: 0, xmax: 1, ymin: 0, ymax: 1.1,
     xlabel: $x$, ylabel: $F(x)$,
     axis-y-extend: 0,
+    axis-x-extend: 0,
     (fn: beta.cdf(Beta)),
   ),
 )

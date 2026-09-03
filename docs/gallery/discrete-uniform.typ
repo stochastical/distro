@@ -1,4 +1,4 @@
-#import "@preview/simple-plot:0.8.0": plot, scatter
+#import "@preview/simple-plot:1.1.0": plot, scatter
 #import "@preview/distro:0.2.0": discrete-uniform
 
 #set page(width: auto, height: auto, margin: 6mm)
